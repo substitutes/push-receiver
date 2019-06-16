@@ -19,6 +19,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
+	"gopkg.in/alecthomas/kingpin.v2"
 	"time"
 
 	_ "github.com/substitutes/push-receiver/docs"
@@ -28,15 +29,23 @@ import (
 var Context context.Context
 var Database *mongo.Database
 
+// Define flags
+var (
+	username = kingpin.Flag("username", "Username for basic auth of the API").Required().Short('u').String()
+	password = kingpin.Flag("password", "Password for basic auth of thee API").Required().Short('p').String()
+	mongoURI = kingpin.Flag("mongo-url", "Mongo DB URI").Short('m').Default("mongodb://localhost:27017").URL()
+)
+
 func main() {
+	kingpin.Parse()
 
 	r := gin.New()
 
 	log := logrus.New()
 
-	r.Use(ginlogrus.Logger(log), gin.Recovery())
+	r.Use(ginlogrus.Logger(log), gin.Recovery(), gin.BasicAuth(gin.Accounts{*username: *password}))
 
-	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
+	client, err := mongo.NewClient(options.Client().ApplyURI((*mongoURI).String()))
 	if err != nil {
 		log.Fatal("Failed to create MongoDB driver: ", err)
 	}
