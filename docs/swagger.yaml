@@ -1,0 +1,68 @@
+basePath: /api/v1
+definitions:
+  model.APIResponse:
+    properties:
+      error:
+        type: error
+      message:
+        type: string
+    type: object
+  model.SuccessResponse:
+    properties:
+      class:
+        type: string
+    type: object
+  models.SubstituteResponse:
+    properties:
+      meta:
+        type: SubstituteMeta
+      substitutes:
+        items:
+          type: Substitute
+        type: array
+    type: object
+host: '{{.Host}}'
+info:
+  contact:
+    email: support@steinbart.xyz
+  description: Substitutes project push receiver for push-cli
+  license:
+    name: AGPLv3
+  title: Push Receiver API
+  version: "1.0"
+paths:
+  /substitute/class:
+    put:
+      consumes:
+      - application/json
+      description: Add a class that has substitutes
+      parameters:
+      - description: Substitute data
+        in: body
+        name: substitute
+        required: true
+        schema:
+          $ref: '#/definitions/models.SubstituteResponse'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            items:
+              $ref: '#/definitions/model.SuccessResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.APIResponse'
+            type: object
+      summary: Add a class
+schemes:
+- http
+- https
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

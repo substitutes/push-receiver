@@ -1,0 +1,104 @@
+{
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Substitutes project push receiver for push-cli",
+        "title": "Push Receiver API",
+        "contact": {
+            "email": "support@steinbart.xyz"
+        },
+        "license": {
+            "name": "AGPLv3"
+        },
+        "version": "1.0"
+    },
+    "host": "{{.Host}}",
+    "basePath": "/api/v1",
+    "paths": {
+        "/substitute/class": {
+            "put": {
+                "description": "Add a class that has substitutes",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Add a class",
+                "parameters": [
+                    {
+                        "description": "Substitute data",
+                        "name": "substitute",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/models.SubstituteResponse"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.SuccessResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.APIResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.APIResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "error"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SuccessResponse": {
+            "type": "object",
+            "properties": {
+                "class": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.SubstituteResponse": {
+            "type": "object",
+            "properties": {
+                "meta": {
+                    "type": "SubstituteMeta"
+                },
+                "substitutes": {
+                    "type": "array",
+                    "items": {
+                        "type": "Substitute"
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
+        }
+    }
+}
