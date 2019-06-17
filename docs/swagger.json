@@ -20,24 +20,21 @@
     "paths": {
         "/substitute/class": {
             "put": {
-                "description": "Add a class that has substitutes",
+                "description": "Delete a class",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Add a class",
+                "summary": "Delete a class",
                 "parameters": [
                     {
-                        "description": "Substitute data",
-                        "name": "substitute",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/models.SubstituteResponse"
-                        }
+                        "type": "string",
+                        "description": "Object ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -48,6 +45,13 @@
                             "items": {
                                 "$ref": "#/definitions/model.SuccessResponse"
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.APIResponse"
                         }
                     },
                     "500": {

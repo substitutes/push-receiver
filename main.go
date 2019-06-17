@@ -72,6 +72,8 @@ func main() {
 		substitute := v1.Group("/substitute")
 		{
 			substitute.PUT("class", c.AddClass)
+			substitute.GET("classes", c.ListClasses)
+			substitute.DELETE("class/:id", c.DeleteRecord)
 		}
 	}
 

@@ -35,15 +35,13 @@ paths:
     put:
       consumes:
       - application/json
-      description: Add a class that has substitutes
+      description: Delete a class
       parameters:
-      - description: Substitute data
-        in: body
-        name: substitute
+      - description: Object ID
+        in: path
+        name: id
         required: true
-        schema:
-          $ref: '#/definitions/models.SubstituteResponse'
-          type: object
+        type: string
       produces:
       - application/json
       responses:
@@ -53,12 +51,17 @@ paths:
             items:
               $ref: '#/definitions/model.SuccessResponse'
             type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.APIResponse'
+            type: object
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/model.APIResponse'
             type: object
-      summary: Add a class
+      summary: Delete a class
 schemes:
 - http
 - https
