@@ -2,7 +2,7 @@ package model
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/substitutes/substitutes/models"
+	"github.com/substitutes/substitutes/structs"
 )
 
 type APIResponse struct {
@@ -20,8 +20,8 @@ func (a *APIResponse) Throw(code int, c *gin.Context) {
 
 // Substitutes is a meta struct for holding substitute data
 type Substitutes struct {
-	Substitutes []models.Substitute   `json:"substitutes"`
-	Meta        models.SubstituteMeta `json:"meta"`
+	Substitutes []structs.Substitute   `json:"substitutes"`
+	Meta        structs.SubstituteMeta `json:"meta"`
 }
 
 type SuccessResponse struct {
