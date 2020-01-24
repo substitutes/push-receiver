@@ -5,9 +5,10 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/substitutes/push-receiver/model"
-	"github.com/substitutes/substitutes/models"
+	"github.com/substitutes/substitutes/structs"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"time"
 )
 
@@ -27,19 +28,20 @@ func NewController() *Controller { return &Controller{} }
 // @Param substitute body models.SubstituteResponse true "Substitute data"
 // @Router /substitute/class [put]
 func (ctl *Controller) AddClass(c *gin.Context) {
-	var substitutes models.SubstituteResponse
+	var substitutes structs.SubstituteResponse
 	if c.BindJSON(&substitutes) != nil {
 		model.NewMessage("Failed to bind JSON", nil).Throw(500, c)
 		return
 	}
 
 	collection := Database.Collection("substitutes")
-	_, err := collection.InsertOne(context.Background(), substitutes)
+	_o := new(bool)
+	*_o = true
+	_, err := collection.UpdateOne(context.Background(), bson.M{"meta.class": bson.M{"$eq": substitutes.Meta.Class}, "meta.date": bson.M{"$eq": substitutes.Meta.Date}}, bson.M{"$set": substitutes}, &options.UpdateOptions{Upsert: _o})
 	if err != nil {
 		model.NewMessage("Failed to save data to database!", err).Throw(500, c)
 		return
 	}
-
 	c.JSON(201, substitutes.Meta.Class)
 }
 
